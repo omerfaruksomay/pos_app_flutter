@@ -5,6 +5,8 @@ import 'package:pos_app/view/main_layout.dart';
 import 'package:pos_app/view_model/main_layout_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../view_model/auth/auth_view_model.dart';
+
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
@@ -65,27 +67,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              CustomButton(
-                label: 'Login',
-                labelColor: Colors.white,
-                buttonColor: const Color.fromRGBO(46, 99, 110, 1),
-                minWidth: 380,
-                minHeight: 50,
-                onPressed: () {
-                  print(_emailController.text);
-                  print(_passwordController.text);
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider(
-                        create: (context) => MainViewModel(),
-                        child: const MainLayout(),
-                      ),
-                    ),
-                    (route) => false,
-                  );
-                },
-              ),
+              _buildLoginButton(context),
               SizedBox(height: 16),
               CustomButton(
                 label: 'Back',
@@ -101,6 +83,27 @@ class LoginPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLoginButton(BuildContext context) {
+    AuthViewModel viewModel = Provider.of(
+      context,
+      listen: false,
+    );
+    return CustomButton(
+      label: 'Login',
+      labelColor: Colors.white,
+      buttonColor: const Color.fromRGBO(46, 99, 110, 1),
+      minWidth: 380,
+      minHeight: 50,
+      onPressed: () {
+        viewModel.login(
+          _emailController.text.toString().trim(),
+          _passwordController.text.toString().trim(),
+          context,
+        );
+      },
     );
   }
 }

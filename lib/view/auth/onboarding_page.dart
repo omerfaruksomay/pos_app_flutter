@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pos_app/view/auth/login_page.dart';
 import 'package:pos_app/view/custom_widgets/custom_button.dart';
+import 'package:pos_app/view_model/auth/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -34,10 +35,14 @@ class OnboardingPage extends StatelessWidget {
               minHeight: 40,
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                      create: (context) => AuthViewModel(),
+                      child: LoginPage(),
+                    ),
+                  ),
+                );
               },
             )
           ],

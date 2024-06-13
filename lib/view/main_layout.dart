@@ -10,11 +10,11 @@ class MainLayout extends StatelessWidget {
     return Consumer<MainViewModel>(
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(46, 99, 110, 100),
+          backgroundColor: Color.fromRGBO(46, 99, 110, 150),
           centerTitle: true,
           title: Text(
             viewModel.title[viewModel.selectedIndex],
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         body: viewModel.pages[viewModel.selectedIndex],
