@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pos_app/model/table.dart';
 import 'package:pos_app/view_model/auth/auth_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/category.dart';
 import '../model/menu.dart';
@@ -58,8 +59,9 @@ class MenusPage extends StatelessWidget {
     AuthViewModel authViewModel = Provider.of(context, listen: false);
     return InkWell(
       onTap: () async {
+        final prefs = await SharedPreferences.getInstance();
         await viewModel.orderFood(
-          token: authViewModel.token,
+          token: prefs.get('token').toString(),
           menuId: menus.id,
           tableId: table.id,
           tableName: table.name,

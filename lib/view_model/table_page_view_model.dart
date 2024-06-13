@@ -9,6 +9,7 @@ import 'package:pos_app/view/menus_page.dart';
 import 'package:pos_app/view/sales_page.dart';
 import 'package:provider/provider.dart';
 
+import '../model/sale_details.dart';
 import 'auth/auth_view_model.dart';
 
 class TablePageViewModel with ChangeNotifier {
@@ -16,6 +17,8 @@ class TablePageViewModel with ChangeNotifier {
   final String _catApiKey = "http://10.0.2.2:8000/api/categories";
   final String _menuApiKey = "http://10.0.2.2:8000/api/menus/";
   final String _orderApiKey = "http://10.0.2.2:8000/api/orderFood";
+  final String _getOrderApiKey = "http://10.0.2.2:8000/api/orders/";
+
 
   int _selectedIndex = 0;
 
@@ -36,6 +39,9 @@ class TablePageViewModel with ChangeNotifier {
   final List<Tables> _tables = [];
   final List<Categories> _categories = [];
   final List<Menu> _menus = [];
+  final List<SaleDetails> _sales =[];
+
+  List<SaleDetails> get sales => _sales;
 
   List<Menu> get menus => _menus;
 
@@ -93,6 +99,34 @@ class TablePageViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void getSaleDetails(int table_id)async{
+    Uri uri = Uri.parse(_getOrderApiKey + '$table_id');
+    http.Response response = await http.get(uri);
+
+    // Gelen veriyi çözümle
+    List<dynamic> apiResponse = jsonDecode(response.body);
+    if (apiResponse.isNotEmpty) {
+      // İlk satış nesnesini alıyoruz
+      Map<String, dynamic> firstSale = apiResponse[0];
+
+      // Bu satışın detaylarını alıyoruz
+      List<dynamic> allSaleDetails = firstSale['sale_details'];
+
+      print(allSaleDetails);
+
+      _sales.clear();
+
+      for (Map<String, dynamic> saleDetail in allSaleDetails) {
+        SaleDetails sale = SaleDetails.fromJson(saleDetail);
+        _sales.add(sale);
+      }
+      notifyListeners();
+    } else {
+      print('No sales found');
+    }
+  }
+
+
   Future<Map<String, dynamic>> orderFood({
     required String token,
     required int menuId,
@@ -133,4 +167,7 @@ class TablePageViewModel with ChangeNotifier {
       throw Exception('Failed to place order: ${response.body}');
     }
   }
+
+
+
 }

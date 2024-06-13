@@ -80,10 +80,14 @@ class AuthViewModel with ChangeNotifier {
       _userId = '';
       notifyListeners();
 
+
+
       // SharedPreferences'dan token ve user_id'yi kaldırın
       final prefs = await SharedPreferences.getInstance();
+      print(prefs.get('token'));
       await prefs.remove('token');
       await prefs.remove('user_id');
+      print(prefs.get('token'));
 
       // Kullanıcıyı giriş sayfasına yönlendirme
       Navigator.pushAndRemoveUntil(

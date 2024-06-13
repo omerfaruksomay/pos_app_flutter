@@ -28,7 +28,9 @@ class TabledetailsPage extends StatelessWidget {
       ),
       ChangeNotifierProvider(
         create: (context) => TablePageViewModel(),
-        child: SalesPage(),
+        child: SalesPage(
+          table: table,
+        ),
       ),
     ];
     return Scaffold(
